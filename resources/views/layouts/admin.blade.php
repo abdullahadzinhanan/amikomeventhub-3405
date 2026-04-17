@@ -28,7 +28,7 @@
 
         <nav class="flex-1 space-y-2">
             <p class="text-[10px] font-bold uppercase tracking-widest text-indigo-400 mb-4 px-2">Main Menu</p>
-            <a href="admin-dashboard.html"
+            <a href="{{ route('admin.dashboard') }}"
                 class="flex items-center gap-3 px-4 py-3 bg-indigo-800 text-white rounded-xl font-bold transition">
                 <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -37,7 +37,7 @@
                 </svg>
                 Dashboard
             </a>
-            <a href="admin-events.html"
+            <a href="{{ route('admin.events') }}"
                 class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-800 rounded-xl font-bold transition">
                 <svg class="w-5 h-5 text-indigo-400 group-hover:text-indigo-300" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -47,7 +47,16 @@
                 </svg>
                 Kelola Event
             </a>
-            <a href="admin-transactions.html"
+            <a href="{{ route('admin.categories') }}"
+                class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-800 rounded-xl font-bold transition">
+                <svg class="w-5 h-5 text-indigo-400 group-hover:text-indigo-300" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                </svg>
+                Kategori
+            <a href="{{ route('admin.transactions') }}"
                 class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-800 rounded-xl font-bold transition">
                 <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -90,9 +99,11 @@
                 </div>
             </div>
         </header>
-
+        
         @yield('content')
+
     </main>
+
 </body>
 
 </html>
