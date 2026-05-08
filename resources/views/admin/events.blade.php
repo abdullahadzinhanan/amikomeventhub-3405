@@ -39,7 +39,7 @@
                         <tr class="hover:bg-slate-50/50 transition">
                             <td class="px-8 py-6 font-bold text-slate-400">1</td>
                             <td class="px-8 py-6">
-                                <img src="assets/concert.png" class="w-16 h-20 rounded-xl object-cover shadow-sm">
+                                <img src="/assets/concert.png" class="w-16 h-20 rounded-xl object-cover shadow-sm">
                             </td>
                             <td class="px-8 py-6">
                                 <p class="font-black text-slate-800">Jazz Night 2024</p>
@@ -73,7 +73,7 @@
                         <tr class="hover:bg-slate-50/50 transition">
                             <td class="px-8 py-6 font-bold text-slate-400">2</td>
                             <td class="px-8 py-6">
-                                <img src="assets/workshop.png" class="w-16 h-20 rounded-xl object-cover shadow-sm">
+                                <img src="/assets/workshop.png" class="w-16 h-20 rounded-xl object-cover shadow-sm">
                             </td>
                             <td class="px-8 py-6">
                                 <p class="font-black text-slate-800">AI & Future Workshop</p>
