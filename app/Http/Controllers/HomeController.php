@@ -9,9 +9,13 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index()
-    {
-        $events = Event::with('category')->latest()->get();
-        $categories = Category::all();
-        return view('welcome', compact('events', 'categories'));
-    }
+{
+    $events = Event::with('category')->latest()->get();
+    $categories = Category::all();
+
+    return response()
+        ->view('welcome', compact('events', 'categories'))
+        ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+        ->header('Pragma', 'no-cache');
+}
 }
