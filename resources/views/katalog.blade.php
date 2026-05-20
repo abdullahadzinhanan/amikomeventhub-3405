@@ -17,10 +17,10 @@
     <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
         <div class="flex flex-col items-center">
             <div class="w-24 h-24 bg-blue-500 rounded-full mb-4 flex items-center justify-center text-white text-3xl font-bold">JD</div>
-            <h1 class="text-2xl font-bold">Ridho Karunia Setiawan</h1>
+            <h1 class="text-2xl font-bold">Abdullah Adzin  Hanan</h1>
             <p class="text-gray-500 italic">24.12.3383</p>
             <div class="mt-4 w-full border-t pt-4">
-                <p class="text-sm"><strong>Email:</strong> awansetiawann999@students.amikom.ac.id</p>
+                <p class="text-sm"><strong>Email:</strong> abdullahadzinhanan@students.amikom.ac.id</p>
                 <p class="text-sm"><strong>Lokasi:</strong> Yogyakarta, Indonesia</p>
             </div>
         </div>
