@@ -4,19 +4,27 @@
 @section('page_title', 'Kelola Event')
 @section('page_subtitle', 'Buat dan atur acara seru Anda di sini.')
 @section('content')
-<div class="mb-4 text-right">
-    <a href="{{ route('admin.events.create') }}" class="inline-block px-6 py-3
-        bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100
-        hover:bg-indigo-700 active:scale-95 transition">
+<div class="mb-4 flex items-center gap-3">
+    <a href="{{ route('admin.events.create') }}" class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition whitespace-nowrap">
         + Tambah Event Baru
     </a>
 </div>
-<div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm
-overflow-hidden">
+<div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
-            <thead class="bg-slate-50 text-slate-400 uppercase text-[10px]
-            font-black tracking-widest">
+            <thead class="bg-slate-50 text-slate-400 uppercase text-[10px] font-black tracking-widest">
+                <tr>
+                    <th colspan="6" class="px-8 py-4">
+                        <form method="GET" class="flex items-center gap-2 max-w-md">
+                            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari event..." class="flex-1 px-4 py-2 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition text-sm" onchange="this.form.submit()">
+                            @if($search)
+                            <a href="{{ route('admin.events.index') }}" class="px-3 py-2 border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition">
+                                Reset
+                            </a>
+                            @endif
+                        </form>
+                    </th>
+                </tr>
                 <tr>
                     <th class="px-8 py-4 w-16">No</th>
                     <th class="px-8 py-4">Poster</th>
@@ -28,8 +36,7 @@ overflow-hidden">
             <tbody class="divide-y border-t">
                 @forelse($events as $index => $event)
                 <tr class="hover:bg-slate-50/50 transition">
-                    <td class="px-8 py-6 font-bold text-slate-400">{{
-                    $events->firstItem() + $index }}</td>
+                    <td class="px-8 py-6 font-bold text-slate-400">{{ $events->firstItem() + $index }}</td>
                     <td class="px-8 py-6">
                         @if($event->poster_path)
                         <img src="{{ asset('storage/' . $event->poster_path) }}" class="w-16 h-20 rounded-xl object-cover shadow-sm">
@@ -38,16 +45,12 @@ overflow-hidden">
                         @endif
                     </td>
                     <td class="px-8 py-6">
-                        <p class="font-black text-slate-800">{{ $event->title
-                        }}</p>
-                        <p class="text-xs text-slate-400">{{
-                            $event->category->name ?? '-' }} • {{ $event->date }}</p>
+                        <p class="font-black text-slate-800">{{ $event->title }}</p>
+                        <p class="text-xs text-slate-400">{{ $event->category->name ?? '-' }} • {{ $event->date }}</p>
                     </td>
                     <td class="px-8 py-6">
-                        <p class="font-bold text-indigo-600">Rp {{
-                        number_format($event->price, 0, ',', '.') }}</p>
-                        <p class="text-xs text-slate-400">Stok: {{ $event->stock
-                        }}</p>
+                        <p class="font-bold text-indigo-600">Rp {{ number_format($event->price, 0, ',', '.') }}</p>
+                        <p class="text-xs text-slate-400">Stok: {{ $event->stock }}</p>
                     </td>
                     <td class="px-8 py-6">
                         <div class="flex gap-2">
@@ -56,7 +59,6 @@ overflow-hidden">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
                             </a>
-                            
                             <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus acara ini?');">
                                 @csrf
                                 @method('DELETE')
@@ -71,8 +73,7 @@ overflow-hidden">
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-8 py-10 text-center
-                    text-slate-500">Belum ada acara yang ditambahkan.</td>
+                    <td colspan="5" class="px-8 py-10 text-center text-slate-500">Belum ada acara yang ditambahkan.</td>
                 </tr>
                 @endforelse
             </tbody>

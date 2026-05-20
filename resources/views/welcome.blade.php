@@ -101,4 +101,31 @@
             @endforelse
         </div>
     </section>
+
+    <!-- Partners Section -->
+    <section class="max-w-7xl mx-auto px-6 py-12">
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h2 class="text-2xl font-extrabold mb-2">Partner Kami</h2>
+                <p class="text-slate-500 font-medium">Mitra yang mendukung platform AmikomEventHub</p>
+            </div>
+        </div>
+        @if($partners->count() > 0)
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            @foreach($partners as $partner)
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex items-center justify-center hover:shadow-md transition">
+                @if($partner->logo)
+                <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->name }}" class="max-w-full max-h-12 object-contain filter grayscale hover:filter-none transition">
+                @else
+                <span class="text-slate-400 text-xs font-bold">{{ $partner->name }}</span>
+                @endif
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="text-center py-12">
+            <p class="text-slate-500">Belum ada partner yang ditambahkan.</p>
+        </div>
+        @endif
+    </section>
 @endsection

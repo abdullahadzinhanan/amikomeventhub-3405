@@ -12,11 +12,17 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Memakai relasi dan pengaturan limit paginasi (10 entri per halaman)
-        $events = \App\Models\Event::with('category')->latest()->paginate(10);
-        return view('admin.events.index', compact('events'));
+        $search = $request->input('search');
+        $events = \App\Models\Event::with('category')
+            ->when($search, function ($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                      ->orWhere('date', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(10);
+        return view('admin.events.index', compact('events', 'search'));
     }
 
     /**
