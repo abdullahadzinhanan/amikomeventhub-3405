@@ -7,28 +7,37 @@
 
 @php use Illuminate\Support\Str; @endphp
 
-<div class="mb-4 flex items-center gap-3">
-    <a href="{{ route('admin.partners.create') }}" class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition whitespace-nowrap">
-        + Tambah Partner
-    </a>
+<div class="mb-6 flex flex-col gap-4">
+    <div>
+        <a href="{{ route('admin.partners.create') }}" class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition whitespace-nowrap">
+            + Tambah Partner
+        </a>
+    </div>
+
+    <form method="GET" action="{{ route('admin.partners') }}" class="flex items-center gap-2 w-full">
+        <div class="relative flex-1">
+            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari partner..." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition text-sm">
+        </div>
+        
+        <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-md hover:bg-indigo-700 active:scale-95 transition text-sm flex items-center gap-2 whitespace-nowrap">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <span>Cari</span>
+        </button>
+
+        @if($search)
+        <a href="{{ route('admin.partners') }}" class="px-4 py-3 border border-slate-200 text-slate-600 rounded-2xl hover:bg-slate-50 transition text-sm font-medium whitespace-nowrap">
+            Reset
+        </a>
+        @endif
+    </form>
 </div>
 
 <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead class="bg-slate-50 text-slate-400 uppercase text-[10px] font-black tracking-widest">
-                <tr>
-                    <th colspan="6" class="px-8 py-4">
-                        <form method="GET" class="flex items-center gap-2 max-w-md">
-                            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari partner..." class="flex-1 px-4 py-2 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition text-sm" onchange="this.form.submit()">
-                            @if($search)
-                            <a href="{{ route('admin.partners') }}" class="px-3 py-2 border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition">
-                                Reset
-                            </a>
-                            @endif
-                        </form>
-                    </th>
-                </tr>
                 <tr>
                     <th class="px-8 py-4 w-16">No</th>
                     <th class="px-8 py-4">Logo</th>
