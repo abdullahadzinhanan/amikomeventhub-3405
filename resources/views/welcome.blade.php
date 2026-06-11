@@ -53,15 +53,51 @@
 
     <!-- Events Grid -->
     <section id="events" class="max-w-7xl mx-auto px-6 py-20">
-        <div class="flex justify-between items-end mb-12">
+        <div class="flex justify-between items-end mb-8">
             <div>
                 <h2 class="text-3xl font-extrabold mb-2">Event Terdekat</h2>
                 <p class="text-slate-500 font-medium">Jangan sampai ketinggalan acara seru minggu ini!</p>
             </div>
-            <div class="flex gap-2">
-                <button class="p-3 border rounded-xl hover:bg-white hover:shadow-md transition">Semua Kategori</button>
-            </div>
         </div>
+
+        {{-- ============================================================ --}}
+        {{-- BLOK NAVIGASI FILTER KATEGORI (Modul 6.4.3)                  --}}
+        {{-- ============================================================ --}}
+        <div class="mb-10 flex flex-wrap gap-3 items-center">
+            {{-- Tombol "Semua Kategori" - aktif saat tidak ada filter --}}
+            <a href="/#events"
+               class="px-5 py-2.5 rounded-2xl font-bold text-sm transition-all duration-200
+                      {{ !request('category')
+                          ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-105'
+                          : 'bg-white border-2 border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600' }}">
+                🎪 Semua Kategori
+            </a>
+
+            {{-- Iterasi tab kategori dinamis --}}
+            @foreach($categories as $cat)
+                <a href="/?category={{ $cat->slug }}#events"
+                   class="px-5 py-2.5 rounded-2xl font-bold text-sm transition-all duration-200
+                          {{ request('category') === $cat->slug
+                              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-105'
+                              : 'bg-white border-2 border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600' }}">
+                    {{ $cat->name }}
+                </a>
+            @endforeach
+        </div>
+
+        {{-- Info hasil filter --}}
+        @if(request('category'))
+            @php $activeCat = $categories->firstWhere('slug', request('category')); @endphp
+            <div class="mb-6 px-5 py-3 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-between">
+                <p class="text-indigo-700 font-semibold text-sm">
+                    Menampilkan event kategori:
+                    <span class="font-black">{{ $activeCat->name ?? request('category') }}</span>
+                    <span class="ml-2 text-indigo-400">({{ $events->count() }} event ditemukan)</span>
+                </p>
+                <a href="/#events" class="text-xs text-indigo-400 hover:text-indigo-700 font-bold transition">✕ Reset Filter</a>
+            </div>
+        @endif
+        {{-- ============================================================ --}}
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($events as $event)
@@ -96,7 +132,9 @@
             </div>
             @empty
             <div class="col-span-3 text-center py-20">
-                <p class="text-slate-500 text-lg">Belum ada event yang tersedia.</p>
+                <div class="text-6xl mb-4">🔍</div>
+                <p class="text-slate-500 text-lg font-semibold">Tidak ada event untuk kategori ini.</p>
+                <a href="/#events" class="mt-4 inline-block text-indigo-600 font-bold hover:underline">Lihat semua event →</a>
             </div>
             @endforelse
         </div>
