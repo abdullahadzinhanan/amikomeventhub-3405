@@ -69,7 +69,8 @@
                 Kelola Partner
             </a>
 
-            <a href="{{ route('admin.transactions') }}"
+            {{-- ✅ PERBAIKAN: route diubah ke admin.transactions.index --}}
+            <a href="{{ route('admin.transactions.index') }}"
                class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.transactions*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
                 <svg class="w-5 h-5 {{ request()->routeIs('admin.transactions*') ? 'text-indigo-300' : 'text-indigo-400' }}"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,10 +82,6 @@
             </a>
         </nav>
 
-        {{-- ============================================================ --}}
-        {{-- TOMBOL LOGOUT — Modul 8.4.4                                   --}}
-        {{-- Menggunakan <form> POST agar session benar-benar dihapus      --}}
-        {{-- ============================================================ --}}
         <div class="pt-6 border-t border-indigo-800">
             <form action="{{ route('admin.logout') }}" method="POST">
                 @csrf
@@ -103,7 +100,6 @@
 
     <!-- Main Content -->
     <main class="flex-1 p-10 overflow-y-auto w-full">
-        <!-- Header -->
         <header class="flex justify-between items-center mb-10 w-full col-span-full">
             <div>
                 <h1 class="text-3xl font-black">@yield('page_title', 'Dashboard')</h1>

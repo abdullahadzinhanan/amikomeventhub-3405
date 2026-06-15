@@ -1,10 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Checkout - ' . $event->title)
 @section('content')
-
 <main class="max-w-3xl mx-auto px-6 py-20">
     <div class="mb-12">
-        {{-- Tombol kembali pakai nama route yang sudah diperbaiki --}}
         <a href="{{ route('events.show', $event->id) }}" class="text-indigo-600 font-bold flex items-center gap-2 mb-6">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -15,7 +13,7 @@
         <p class="text-slate-500 mt-2">Lengkapi data Anda untuk mendapatkan tiket.</p>
     </div>
 
-    {{-- Pesan error (tiket habis, dll) --}}
+    {{-- Pesan error jika tiket habis atau gagal --}}
     @if(session('error'))
     <div class="mb-6 p-4 bg-red-100 text-red-700 rounded-xl font-bold">
         {{ session('error') }}
@@ -28,10 +26,10 @@
         <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
             <h3 class="text-xl font-bold mb-6 border-b pb-4">Pesanan Anda</h3>
             <div class="flex gap-6 items-start">
-                <img src="{{ ($event->poster_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($event->poster_path))
+                <img src="{{ ($event->poster_path && Storage::disk('public')->exists($event->poster_path))
                     ? asset('storage/' . $event->poster_path)
                     : 'https://placehold.co/200x200' }}"
-                    alt="Poster Event"
+                    alt="Event Poster"
                     class="w-24 h-24 rounded-2xl object-cover">
                 <div>
                     <h4 class="font-extrabold text-lg">{{ $event->title }}</h4>
@@ -64,7 +62,9 @@
                 @csrf
 
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Nama Lengkap</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                        Nama Lengkap
+                    </label>
                     <input type="text" name="customer_name"
                         placeholder="Masukkan nama sesuai identitas"
                         class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
@@ -76,7 +76,9 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Email Aktif</label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                            Email Aktif
+                        </label>
                         <input type="email" name="customer_email"
                             placeholder="contoh@gmail.com"
                             class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
@@ -89,7 +91,9 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">No. WhatsApp</label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                            No. WhatsApp
+                        </label>
                         <input type="tel" name="customer_phone"
                             placeholder="08xxxxxxx"
                             class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
