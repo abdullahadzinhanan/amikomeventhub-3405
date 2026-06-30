@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EventTicketMail;
 
 class MidtransWebhookController extends Controller
 {
@@ -30,7 +33,7 @@ class MidtransWebhookController extends Controller
             return response()->json(['message' => 'Already processed']);
         }
 
-        // Logika penerjemahan status Midtrans -> status lokal (mengikuti konvensi capitalized project ini)
+        // Logika penerjemahan status Midtrans -> status lokal (konvensi capitalized project ini)
         if ($transactionStatus == 'capture') {
             if ($fraudStatus == 'challenge') {
                 $transaction->status = 'Challenge';
@@ -54,6 +57,21 @@ class MidtransWebhookController extends Controller
 
     private function processSuccess(Transaction $transaction)
     {
-        // Instruksi lanjutan saat transaksi lunas (pemotongan tiket) akan dibahas pada Modul 13
+        $event = $transaction->event;
+
+        // Jika tiket masih ada dan terhubung dengan data event, kurangi jumlahnya sebanyak 1
+        if ($event && $event->stock > 0) {
+            $event->stock = $event->stock - 1;
+            $event->save();
+
+            // Mengirimkan email E-Ticket ke pelanggan
+            try {
+                Mail::to($transaction->customer_email)->send(new EventTicketMail($transaction));
+            } catch (\Exception $e) {
+                Log::error('Gagal mengirim email E-Ticket: ' . $e->getMessage());
+            }
+        } else {
+            Log::warning('Stock habis setelah pembayaran berhasil (Perlu proses refund opsional). Order: ' . $transaction->order_id);
+        }
     }
 }
