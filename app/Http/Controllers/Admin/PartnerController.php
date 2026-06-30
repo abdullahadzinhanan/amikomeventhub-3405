@@ -41,7 +41,7 @@ class PartnerController extends Controller
 
         Partner::create($data);
 
-        return redirect()->route('admin.partners')->with('success', 'Partner berhasil ditambahkan.');
+        return redirect()->route('admin.partners.index')->with('success', 'Partner berhasil ditambahkan.');
     }
 
     public function edit(Partner $partner)
@@ -67,7 +67,7 @@ class PartnerController extends Controller
 
         $partner->update($data);
 
-        return redirect()->route('admin.partners')->with('success', 'Partner berhasil diperbarui.');
+        return redirect()->route('admin.partners.index')->with('success', 'Partner berhasil diperbarui.');
     }
 
     public function destroy(Partner $partner)
@@ -76,6 +76,6 @@ class PartnerController extends Controller
             Storage::disk('public')->delete($partner->logo);
         }
         $partner->delete();
-        return redirect()->route('admin.partners')->with('success', 'Partner berhasil dihapus.');
+        return redirect()->route('admin.partners.index')->with('success', 'Partner berhasil dihapus.');
     }
 }

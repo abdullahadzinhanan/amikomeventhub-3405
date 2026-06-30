@@ -12,7 +12,7 @@
         </a>
     </div>
 
-    <form method="GET" action="{{ route('admin.categories') }}" class="flex items-center gap-2 w-full">
+    <form method="GET" action="{{ route('admin.categories.index') }}" class="flex items-center gap-2 w-full">
         <div class="relative flex-1">
             <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari kategori..." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition text-sm">
         </div>
@@ -25,7 +25,7 @@
         </button>
 
         @if($search)
-        <a href="{{ route('admin.categories') }}" class="px-4 py-3 border border-slate-200 text-slate-600 rounded-2xl hover:bg-slate-50 transition text-sm font-medium whitespace-nowrap">
+        <a href="{{ route('admin.categories.index') }}" class="px-4 py-3 border border-slate-200 text-slate-600 rounded-2xl hover:bg-slate-50 transition text-sm font-medium whitespace-nowrap">
             Reset
         </a>
         @endif

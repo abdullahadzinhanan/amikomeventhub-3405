@@ -47,7 +47,7 @@
                 Kelola Event
             </a>
 
-            <a href="{{ route('admin.categories') }}"
+            <a href="{{ route('admin.categories.index') }}"
                class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.categories*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
                 <svg class="w-5 h-5 {{ request()->routeIs('admin.categories*') ? 'text-indigo-300' : 'text-indigo-400' }}"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@
                 Kelola Kategori
             </a>
 
-            <a href="{{ route('admin.partners') }}"
+            <a href="{{ route('admin.partners.index') }}"
                class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.partners*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
                 <svg class="w-5 h-5 {{ request()->routeIs('admin.partners*') ? 'text-indigo-300' : 'text-indigo-400' }}"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">

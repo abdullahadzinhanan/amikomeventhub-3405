@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Hero Section -->
     <section class="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
         <div class="flex-1 space-y-8">
             <span class="inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full text-sm font-bold uppercase tracking-wider">#1
@@ -51,7 +50,6 @@
         </div>
     </section>
 
-    <!-- Events Grid -->
     <section id="events" class="max-w-7xl mx-auto px-6 py-20">
         <div class="flex justify-between items-end mb-8">
             <div>
@@ -60,11 +58,7 @@
             </div>
         </div>
 
-        {{-- ============================================================ --}}
-        {{-- BLOK NAVIGASI FILTER KATEGORI (Modul 6.4.3)                  --}}
-        {{-- ============================================================ --}}
         <div class="mb-10 flex flex-wrap gap-3 items-center">
-            {{-- Tombol "Semua Kategori" - aktif saat tidak ada filter --}}
             <a href="/#events"
                class="px-5 py-2.5 rounded-2xl font-bold text-sm transition-all duration-200
                       {{ !request('category')
@@ -73,7 +67,6 @@
                 🎪 Semua Kategori
             </a>
 
-            {{-- Iterasi tab kategori dinamis --}}
             @foreach($categories as $cat)
                 <a href="/?category={{ $cat->slug }}#events"
                    class="px-5 py-2.5 rounded-2xl font-bold text-sm transition-all duration-200
@@ -85,7 +78,6 @@
             @endforeach
         </div>
 
-        {{-- Info hasil filter --}}
         @if(request('category'))
             @php $activeCat = $categories->firstWhere('slug', request('category')); @endphp
             <div class="mb-6 px-5 py-3 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-between">
@@ -97,7 +89,6 @@
                 <a href="/#events" class="text-xs text-indigo-400 hover:text-indigo-700 font-bold transition">✕ Reset Filter</a>
             </div>
         @endif
-        {{-- ============================================================ --}}
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($events as $event)
@@ -124,9 +115,10 @@
                     </div>
                     <div class="flex justify-between items-center pt-4 border-t">
                         <span class="text-2xl font-black text-indigo-600">Rp {{ number_format($event->price, 0, ',', '.') }}</span>
-                        <a href="{{ url('event-detail/' . $event->id) }}"
-                            class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">Lihat
-                            Detail</a>
+                        <a href="{{ route('events.show', $event->id) }}"
+                            class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">
+                            Lihat Detail
+                        </a>
                     </div>
                 </div>
             </div>
@@ -140,7 +132,6 @@
         </div>
     </section>
 
-    <!-- Partners Section -->
     <section class="max-w-7xl mx-auto px-6 py-12">
         <div class="flex justify-between items-end mb-8">
             <div>

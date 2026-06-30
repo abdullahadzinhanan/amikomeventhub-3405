@@ -37,7 +37,7 @@
                 @enderror
             </div>
             <div class="flex gap-4">
-                <a href="{{ route('admin.partners') }}" class="px-6 py-3 border border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition">Batal</a>
+                <a href="{{ route('admin.partners.index') }}" class="px-6 py-3 border border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition">Batal</a>
                 <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition">Simpan</button>
             </div>
         </form>
