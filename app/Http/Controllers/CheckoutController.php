@@ -15,29 +15,24 @@ class CheckoutController extends Controller
     public function create(Event $event)
     {
         $categories = \App\Models\Category::all();
-
         return view('checkout.create', compact('event', 'categories'));
     }
 
     public function store(Request $request, Event $event)
     {
-        // 1. Validasi Input
         $request->validate([
             'customer_name'  => 'required|string|max:255',
             'customer_email' => 'required|email|max:255',
             'customer_phone' => 'required|string|max:20',
         ]);
 
-        // 2. Cegah checkout jika tiket habis
         if ($event->stock <= 0) {
             return back()->with('error', 'Mohon maaf, tiket untuk acara ini sudah habis.');
         }
 
-        // 3. Generate Order ID unik
         $orderId    = 'TRX-' . time() . '-' . Str::random(5);
-        $totalPrice = $event->price + 5000; // harga tiket + biaya admin
+        $totalPrice = $event->price + 5000;
 
-        // 4. Simpan transaksi ke database
         $transaction = Transaction::create([
             'event_id'       => $event->id,
             'order_id'       => $orderId,
@@ -48,101 +43,118 @@ class CheckoutController extends Controller
             'status'         => 'Pending',
         ]);
 
-        // --- INTEGRASI SNAP MIDTRANS ---
+        \Midtrans\Config::$serverKey    = env('MIDTRANS_SERVER_KEY');
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized  = true;
+        \Midtrans\Config::$is3ds        = true;
 
-        // Konfigurasi Kredensial Environment Midtrans
-        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        \Midtrans\Config::$isProduction = false; // Mode Sandbox!
-        \Midtrans\Config::$isSanitized = true;
-        \Midtrans\Config::$is3ds = true;
-
-        // Susun Paket Array Data Transaksi
         $params = [
             'transaction_details' => [
-                'order_id' => $orderId,
+                'order_id'     => $orderId,
                 'gross_amount' => $totalPrice,
             ],
             'customer_details' => [
                 'first_name' => $request->customer_name,
-                'email' => $request->customer_email,
-                'phone' => $request->customer_phone,
+                'email'      => $request->customer_email,
+                'phone'      => $request->customer_phone,
+            ],
+            // ✅ FIX: Beritahu Midtrans kemana harus redirect setelah pembayaran selesai
+            // Midtrans akan menambahkan ?order_id=...&status_code=...&transaction_status=...
+            // ke URL ini secara otomatis
+            'callbacks' => [
+                'finish' => url('/payment-finish'),
             ],
         ];
 
         try {
-            // Perintah Tembak Generate Snap Token
             $snapToken = \Midtrans\Snap::getSnapToken($params);
-
-            // Update rekaman kita bahwa transaksi terkait sudah memiliki id token pelunasan
             $transaction->update(['snap_token' => $snapToken]);
-
-            // Redirect ke halaman antarmuka pembayaran final pelanggan
             return redirect()->route('checkout.payment', $transaction->order_id);
-
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal memproses pembayaran jaringan: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memproses pembayaran: ' . $e->getMessage());
         }
     }
 
     public function payment($order_id)
     {
-         // Mengambil daftar kategori untuk keperluan menu footer
-         $categories = \App\Models\Category::all();
+        $categories  = \App\Models\Category::all();
+        $transaction = Transaction::with('event')->where('order_id', $order_id)->firstOrFail();
+        return view('checkout.payment', compact('transaction', 'categories'));
+    }
 
-         // Ambil transaksi beserta relasi event-nya
-         $transaction = Transaction::with('event')->where('order_id', $order_id)->firstOrFail();
+    // ✅ FIX: Route baru untuk menangkap redirect dari Midtrans finish button
+    // Midtrans kirim: /payment-finish?order_id=TRX-xxx&status_code=200&transaction_status=settlement
+    public function finish(Request $request)
+    {
+        $orderId = $request->query('order_id');
 
-         return view('checkout.payment', compact('transaction','categories'));
+        if (!$orderId) {
+            return redirect()->route('home')->with('error', 'Order ID tidak ditemukan.');
+        }
+
+        // Teruskan ke halaman success yang sudah ada logika fallback check-nya
+        return redirect()->route('checkout.success', $orderId);
     }
 
     public function success($order_id)
     {
-        // Mengambil daftar kategori untuk keperluan menu footer
-        $categories = \App\Models\Category::all();
-
-        // Sertakan relasi event, dibutuhkan untuk pengurangan stok & isi email tiket
+        $categories  = \App\Models\Category::all();
         $transaction = Transaction::with('event')->where('order_id', $order_id)->firstOrFail();
 
-        // Validasi status pembayaran asli dari Midtrans (Mencegah manipulasi URL)
-        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        // Jika transaksi sudah Success sebelumnya, langsung tampilkan halaman sukses
+        if ($transaction->status === 'Success') {
+            return view('checkout.success', compact('transaction', 'categories'));
+        }
+
+        \Midtrans\Config::$serverKey    = env('MIDTRANS_SERVER_KEY');
         \Midtrans\Config::$isProduction = false;
-        \Midtrans\Config::$isSanitized = true;
-        \Midtrans\Config::$is3ds = true;
+        \Midtrans\Config::$isSanitized  = true;
+        \Midtrans\Config::$is3ds        = true;
 
         try {
-            // Mengecek status pesanan secara mandiri (Fallback / Bypass)
-            $status = \Midtrans\Transaction::status($order_id);
+            // Fallback Check: cek status langsung ke API Midtrans
+            $status     = \Midtrans\Transaction::status($order_id);
+            $trx_status = is_array($status)
+                ? ($status['transaction_status'] ?? '')
+                : ($status->transaction_status ?? '');
 
-            if ($status) {
-                $trx_status = is_array($status) ? ($status['transaction_status'] ?? '') : ($status->transaction_status ?? '');
+            if (in_array($trx_status, ['settlement', 'capture'])) {
+                // Pembayaran lunas: proses hanya jika status lokal masih Pending
+                if ($transaction->status === 'Pending') {
+                    $transaction->update(['status' => 'Success']);
 
-                // Jika Midtrans mengonfirmasi pembayaran lunas
-                if (in_array($trx_status, ['settlement', 'capture'])) {
+                    if ($transaction->event && $transaction->event->stock > 0) {
+                        $transaction->event->stock -= 1;
+                        $transaction->event->save();
 
-                    // Hanya proses jika status lokal masih Pending (indikasi Webhook belum/tidak masuk)
-                    if ($transaction->status === 'Pending') {
-                        $transaction->update(['status' => 'Success']);
-
-                        if ($transaction->event && $transaction->event->stock > 0) {
-                            $transaction->event->stock = $transaction->event->stock - 1;
-                            $transaction->event->save();
-
-                            try {
-                                Mail::to($transaction->customer_email)
-                                    ->send(new EventTicketMail($transaction));
-                            } catch (\Exception $e) {
-                                Log::error('Gagal mengirim email E-Ticket secara manual (Fallback): ' . $e->getMessage());
-                            }
-                        } else {
-                            Log::warning('Stock habis setelah pembayaran berhasil (Fallback). Order: ' . $transaction->order_id);
+                        try {
+                            Mail::to($transaction->customer_email)
+                                ->send(new EventTicketMail($transaction));
+                        } catch (\Exception $e) {
+                            Log::error('Gagal kirim E-Ticket (Fallback): ' . $e->getMessage());
                         }
+                    } else {
+                        Log::warning('Stok habis saat fallback. Order: ' . $order_id);
                     }
                 }
+
+            } elseif ($trx_status === 'pending') {
+                // Pembayaran belum dilunasi → kembalikan ke halaman payment
+                return redirect()->route('checkout.payment', $order_id)
+                    ->with('info', 'Pembayaran Anda masih menunggu konfirmasi transfer.');
+
+            } else {
+                // Status lain (cancel, expire, deny)
+                return redirect()->route('home')
+                    ->with('error', 'Transaksi dibatalkan atau kadaluarsa.');
             }
+
         } catch (\Exception $e) {
-            // Jika error (transaksi tidak ada di Midtrans, koneksi terputus), kembalikan ke beranda
-            return redirect()->route('home')->with('error', 'Transaksi tidak ditemukan atau gagal diproses oleh sistem pembayaran.');
+            Log::error('Midtrans API error di success(): ' . $e->getMessage());
         }
+
+        // Refresh transaksi dari DB setelah kemungkinan update di atas
+        $transaction = Transaction::with('event')->where('order_id', $order_id)->firstOrFail();
 
         return view('checkout.success', compact('transaction', 'categories'));
     }

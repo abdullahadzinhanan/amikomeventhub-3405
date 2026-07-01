@@ -31,6 +31,10 @@ Route::post('/checkout/{event}', [CheckoutController::class, 'store'])->name('ch
 Route::get('/payment/{order_id}', [CheckoutController::class, 'payment'])->name('checkout.payment');
 Route::get('/success/{order_id}', [CheckoutController::class, 'success'])->name('checkout.success');
 
+// ✅ FIX: Route khusus untuk menangkap redirect dari tombol "Kembali ke halaman merchant" Midtrans
+// Midtrans redirect ke sini dengan format: /payment-finish?order_id=TRX-xxx&transaction_status=settlement
+Route::get('/payment-finish', [CheckoutController::class, 'finish'])->name('checkout.finish');
+
 // ==========================================
 // RUTE WEBHOOK MIDTRANS (Server-to-Server, no session/CSRF)
 // ==========================================
@@ -40,7 +44,7 @@ Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle'])-
 // RUTE ADMIN AREA
 // ==========================================
 Route::prefix('admin')->name('admin.')->group(function () {
-    
+
     // Auth Admin
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
@@ -48,22 +52,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Middleware Auth & Admin
     Route::middleware(['auth', 'admin'])->group(function () {
-        
-        Route::get('/', function() {
+
+        Route::get('/', function () {
             return redirect()->route('admin.dashboard');
         });
-        
+
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        
+
         // Transaksi
         Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
-        
+
         // CRUD dengan Resource
-        // Ini akan otomatis membuat rute:
-        // admin.events.index, .create, .store, .show, .edit, .update, .destroy
         Route::resource('events', EventAdminController::class);
         Route::resource('partners', PartnerController::class);
         Route::resource('categories', CategoryController::class);
-        
     });
 });

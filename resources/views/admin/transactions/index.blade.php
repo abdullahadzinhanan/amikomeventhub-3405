@@ -72,13 +72,16 @@
                             </td>
                             <td class="px-8 py-6">
                                 @php
-                                    $statusClass = match($transaction->status) {
-                                        'paid', 'success' => 'bg-green-100 text-green-700 ring-1 ring-green-200',
-                                        'pending' => 'bg-orange-100 text-orange-700 ring-1 ring-orange-200',
-                                        'expired', 'failed' => 'bg-rose-100 text-rose-700 ring-1 ring-rose-200',
-                                        default => 'bg-slate-100 text-slate-700 ring-1 ring-slate-200',
+                                    // ✅ FIX: pakai strtolower() supaya 'Success', 'success', 'settlement'
+                                    // semua terbaca sama dan tampil badge warna yang benar
+                                    $s = strtolower($transaction->status);
+                                    $statusClass = match(true) {
+                                        in_array($s, ['paid', 'success', 'settlement', 'capture']) => 'bg-green-100 text-green-700 ring-1 ring-green-200',
+                                        in_array($s, ['pending'])                                  => 'bg-orange-100 text-orange-700 ring-1 ring-orange-200',
+                                        in_array($s, ['expired', 'failed', 'cancel', 'deny'])      => 'bg-rose-100 text-rose-700 ring-1 ring-rose-200',
+                                        default                                                    => 'bg-slate-100 text-slate-700 ring-1 ring-slate-200',
                                     };
-                                    $statusText = ucfirst($transaction->status);
+                                    $statusText = ucfirst($s);
                                 @endphp
                                 <span class="px-3 py-1 {{ $statusClass }} rounded-lg text-xs font-bold uppercase">{{ $statusText }}</span>
                             </td>
