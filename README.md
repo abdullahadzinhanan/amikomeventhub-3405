@@ -15,8 +15,8 @@
 
 <br/>
 
-[![Demo](https://img.shields.io/badge/🚀_Lihat_Demo_Aplikasi-6366F1?style=for-the-badge)](https://amikomeventhub-3405-adzinhanan.free.laravel.cloud/)
-[![Admin Panel](https://img.shields.io/badge/🔐_Admin_Dashboard-8B5CF6?style=for-the-badge)](https://amikomeventhub-3405-adzinhanan.free.laravel.cloud/admin/dashboard)
+[![Demo](https://img.shields.io/badge/🚀_Demo_Website-6366F1?style=for-the-badge)](http://amikomeventhub3405.fwh.is/)
+[![Admin Panel](https://img.shields.io/badge/🔐_Admin_Dashboard-8B5CF6?style=for-the-badge)](http://amikomeventhub3405.fwh.is/admin/dashboard)
 
 </div>
 
@@ -24,30 +24,30 @@
 
 ---
 
-## 👤 Identitas Mahasiswa
+## Identitas Mahasiswa
 
 <table>
 <tr>
-<td width="140"><b>🎓 Nama</b></td>
+<td width="140"><b>Nama</b></td>
 <td>Abdullah Adzin Hanan</td>
 </tr>
 <tr>
-<td><b>🆔 NIM</b></td>
+<td><b>NIM</b></td>
 <td>24.12.3405</td>
 </tr>
 <tr>
-<td><b>📚 Mata Kuliah</b></td>
-<td>Git & Database</td>
+<td><b>Mata Kuliah</b></td>
+<td>Digital Business</td>
 </tr>
 <tr>
-<td><b>📦 Repository</b></td>
+<td><b>Repository</b></td>
 <td><code>amikomeventhub-3405</code></td>
 </tr>
 </table>
 
 ---
 
-## 🔗 Link Project
+## Link Project
 
 <table>
 <tr>
@@ -55,35 +55,24 @@
 <th align="left">Link</th>
 </tr>
 <tr>
-<td>🌐 Project Tugas 1 — Laravel Cloud</td>
-<td><a href="https://amikomeventhub-3405-adzinhanan.free.laravel.cloud/">amikomeventhub-3405-adzinhanan.free.laravel.cloud</a></td>
+<td> Project Tugas — Laravel </td>
+<td><a href="http://amikomeventhub3405.fwh.is/">Dashboard Umum</a></td>
 </tr>
 <tr>
-<td>🛠️ Project Tugas 2 — Admin Panel</td>
-<td><a href="https://amikomeventhub-3405-adzinhanan.free.laravel.cloud/admin/dashboard">/admin/dashboard</a></td>
-</tr>
-<tr>
-<td>📊 Project Tugas 2 — Dashboard Cloud</td>
-<td><a href="https://amikomeventhub-3405-adzinhanan.free.laravel.cloud/">amikomeventhub-3405-adzinhanan.free.laravel.cloud</a></td>
+<td> Project Tugas  — Admin Panel</td>
+<td><a href="http://amikomeventhub3405.fwh.is/admin/dashboard">/Dashboard Admin</a></td>
 </tr>
 </table>
 
-> 💡 **Catatan:** Tambahkan link baru dengan menyalin format baris tabel di atas.
+>  **Catatan:** Tanyakan untuk login admin.
 
 ---
 
-## 📝 Deskripsi
+## Deskripsi
 
 Project ini adalah aplikasi **Laravel** untuk **Amikom Event Hub**, sebuah platform yang membantu mahasiswa dan panitia dalam mengelola serta mengikuti berbagai event kampus secara digital. Aplikasi ini telah di-deploy ke **Laravel Cloud** agar dapat diakses secara online.
 
 ---
-
-## ⚙️ Fitur Utama
-
-- ✅ Manajemen data event (tambah, ubah, hapus)
-- ✅ Dashboard admin untuk pengelolaan konten
-- ✅ Tampilan responsif dengan Tailwind CSS
-- ✅ Terhubung dengan database MySQL
 
 ---
 
@@ -94,13 +83,13 @@ Project ini adalah aplikasi **Laravel** untuk **Amikom Event Hub**, sebuah platf
 | **Backend** | Laravel (PHP) |
 | **Frontend** | Tailwind CSS, JavaScript |
 | **Database** | MySQL |
-| **Deployment** | Laravel Cloud |
+| **Deployment** | Infinityfree |
 
 ---
 <div align="center">
 
 ### 🌟 Terima kasih telah mengunjungi repository ini! 🌟
 
-Made with ❤️ by **Abdullah Adzin Hanan**
+Made with by **Abdullah Adzin Hanan**
 
 </div>
