@@ -60,7 +60,7 @@
 </tr>
 <tr>
 <td> Project Tugas  — Admin Panel</td>
-<td><a href="http://amikomeventhub3405.fwh.is/admin/dashboard">/Dashboard Admin</a></td>
+<td><a href="http://amikomeventhub3405.fwh.is/admin/dashboard">Dashboard Admin</a></td>
 </tr>
 </table>
 
@@ -70,13 +70,13 @@
 
 ## Deskripsi
 
-Project ini adalah aplikasi **Laravel** untuk **Amikom Event Hub**, sebuah platform yang membantu mahasiswa dan panitia dalam mengelola serta mengikuti berbagai event kampus secara digital. Aplikasi ini telah di-deploy ke **Laravel Cloud** agar dapat diakses secara online.
+Project ini adalah website **Laravel** untuk **Amikom Event Hub**, sebuah platform yang membantu mahasiswa dan panitia dalam mengelola serta mengikuti berbagai event kampus secara digital. Aplikasi ini telah di-deploy ke **infinityfree** agar dapat diakses secara online.
 
 ---
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Kategori | Teknologi |
 |---|---|
